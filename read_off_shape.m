@@ -6,6 +6,7 @@ function shape = read_off(offfullname)
     nt = textscan(fid, '%d', 1);
     nt = nt{1};
     tmp = textscan(fid, '%d', 1);
+    
 
     verts = textscan(fid, '%f %f %f', nv);
 %     shape.surface.X = verts{1};

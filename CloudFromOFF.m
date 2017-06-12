@@ -7,7 +7,10 @@ function [ S ] = CloudFromOFF( offpath, np, noise, savename )
 % noise = amount of noise to add
 % savename = file name to save point cloud (as .xyz)
 
-S = read_off_shape(offpath);
+% S = read_off_shape(offpath);
+S = struct;
+[S.vertices,S.faces] = readoffmesh(offpath);
+S.nv = size(S.vertices,1);
 
 [S.PCD, S.pcd_map, S.normals] = sample_mesh(S.vertices, S.faces, np);
 % Add noise:
@@ -24,7 +27,7 @@ if (nargin > 3 && ~isempty(savename))
 %     save(savename, 'xyz', '-ascii');
     dlmwrite([savename '.xyz'], S.PCD, 'precision', '%.6f', 'delimiter', ' ');
     dlmwrite([savename '.normals'], S.normals, 'precision', '%.6f', 'delimiter', ' ');
-end;
+end
 
 end
 
