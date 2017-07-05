@@ -6,8 +6,8 @@ function [points, map, normals] = sample_mesh(vertices, faces, n )
 areas = computeArea(vertices, faces);
 
 cum_areas = cumsum(areas);
-cum_areas = cum_areas - cum_areas(1);
-cum_areas = cum_areas / cum_areas(end);
+% cum_areas = cum_areas - cum_areas(1);
+cum_areas = [0;cum_areas ./ cum_areas(end)];
 
 points = zeros(n, 3);
 map = zeros(n, 1);
