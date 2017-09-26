@@ -42,16 +42,16 @@ for i=1:n
         map(i, :) = v(2);
     else
         map(i, :) = v(3);
-    end;
+    end
     
     % Computing vertex normal:
     nn = cross(vb - va, vc - va);
     % normalize normal:
     nn = nn / norm(nn);
-    % orient it such that the most significant value is always positive:
-    if (max(abs(nn)) ~= max(nn))
-        nn = -nn;
-    end;
+%     % orient it such that the most significant value is always positive:
+%     if (max(abs(nn)) ~= max(nn))
+%         nn = -nn;
+%     end
     
     normals(i, :) = nn;
 end
