@@ -20,6 +20,9 @@ S = struct;
 [S.vertices,S.faces] = readoffmesh(offpath);
 S.nv = size(S.vertices,1);
 
+% Scale vertices to be between 0 and 1:
+
+
 use_curvature = 1;
 [S.PCD, S.pcd_map, S.normals, S.curvatures] = sample_mesh(S.vertices, S.faces, np, use_curvature);
 
