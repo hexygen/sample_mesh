@@ -1,3 +1,5 @@
+addpath('curvature');
+
 point_count = 100000;
 seed = 88529482;
 
