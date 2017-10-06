@@ -1,4 +1,4 @@
-function [points, map, normals, curvatures] = sample_mesh(vertices, faces, n, use_curvature, density_dist)
+function [points, normals, curvatures, map] = sample_mesh(vertices, faces, n, use_curvature, density_dist)
 % Samples n points on a mesh given by vertices and faces.
 % points = the x,y,z positions of sampled points.
 % map = for each point the closest vertex on the mesh, for evaluation purpose.
