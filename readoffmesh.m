@@ -13,8 +13,8 @@ function [verts,faces,comments] = readoffmesh(filename,varargin)
     
     try
         % read header
-        header = fscanf(fid,'%s',1);
-        if not(strcmp(header,'OFF') || strcmp(header, 'COFF'))
+        first_token = fscanf(fid,'%s',1);
+        if not(any(strcmp(first_token,{'OFF','COFF'})))
             error(['File ''', filename,''' does not appear to be a valid OFF file.']);
         end
 

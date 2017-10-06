@@ -1,14 +1,43 @@
-function [points, map, normals, curvatures] = sample_mesh(vertices, faces, n, use_curvature)
+function [points, map, normals, curvatures] = sample_mesh(vertices, faces, n, use_curvature, density_dist)
 % Samples n points on a mesh given by vertices and faces.
 % points = the x,y,z positions of sampled points.
 % map = for each point the closest vertex on the mesh, for evaluation purpose.
 
 if (nargin < 4)
     use_curvature = 0;
-end;
+end
 
 areas = computeArea(vertices, faces);
-
+if strcmp(density_dist{1},'uniform')
+    % do nothing
+elseif strcmp(density_dist{1},'minmax')
+    % linear density falloff from bounding box min to boundng box max
+    bbmin = min(vertices,[],1);
+    bbmax = max(vertices,[],1);
+    bbdiag = sum(bbmax-bbmin,2); % 1-norm, otherwise there would be too much min density and too little max density
+    face_centroids = (vertices(faces(:,1),:) + vertices(faces(:,2),:) + vertices(faces(:,3),:)) ./ 3;
+    f = sum(face_centroids - bbmin,2) / bbdiag;
+    f = exp((1-f) .* log2(density_dist{2}) + f .* log2(density_dist{3}));
+    areas = areas .* f;
+elseif strcmp(density_dist{1},'minmax_layers')
+    bbmin = min(vertices,[],1);
+    bbmax = max(vertices,[],1);
+    bbdiag = sum(bbmax-bbmin,2); % 1-norm, otherwise there would be too much min density and too little max density
+    face_centroids = (vertices(faces(:,1),:) + vertices(faces(:,2),:) + vertices(faces(:,3),:)) ./ 3;
+    f = sum(face_centroids - bbmin,2) / bbdiag;
+    face_layer_ind = min(density_dist{2},floor(f * density_dist{2})+1);
+    layer_density = 2.^(linspace(log2(density_dist{3}),log2(density_dist{4}),density_dist{2}));
+    layer_density1 = layer_density(1:2:end);
+    layer_density2 = layer_density(2:2:end);
+    if numel(layer_density1) > numel(layer_density2)
+        layer_density2 = [0,layer_density2];
+    end
+    layer_density = reshape([layer_density1;layer_density2(end:-1:1)],1,[]);
+    layer_density = layer_density(1:density_dist{2});
+    areas = areas .* layer_density(face_layer_ind)';
+else
+    error('Unknown density estimation method.');
+end
 cum_areas = cumsum(areas);
 % cum_areas = cum_areas - cum_areas(1);
 cum_areas = [0;cum_areas ./ cum_areas(end)];
@@ -20,7 +49,7 @@ if (use_curvature)
 %     [PrincipalCurvatures,PrincipalDir1,PrincipalDir2,FaceCMatrix,VertexCMatrix,Cmagnitude]= GetCurvatures( FV ,getderivatives);
     [PrincipalCurvatures]= GetCurvatures( FV ,get_derivatives);
     PrincipalCurvatures = PrincipalCurvatures';
-end;
+end
 
 points = zeros(n, 3);
 map = zeros(n, 1);
@@ -58,7 +87,7 @@ for i=1:n
         % These are vectors with two values (k1 and k2):
         cv = ra*cva + rb*cvb + rc*cvc;
         curvatures(i, :) = cv;
-    end;
+    end
     
     % Finding the closest vertex on the shape:
     if (ra > rb && ra > rc)

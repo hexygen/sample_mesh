@@ -1,4 +1,4 @@
-function [ S ] = CloudFromOFF(offpath, np, savename, noise_strength, noise_color, seed)
+function [ S ] = CloudFromOFF(offpath, np, savename, noise_strength, noise_color, seed, density_dist)
 % CLOUDFROMOFF Reads an OFF file and produces a uniformly sampled point
 % cloud.
 %
@@ -29,7 +29,7 @@ S.nv = size(S.vertices,1);
 
 
 use_curvature = 1;
-[S.PCD, S.pcd_map, S.normals, S.curvatures] = sample_mesh(S.vertices, S.faces, np, use_curvature);
+[S.PCD, S.pcd_map, S.normals, S.curvatures] = sample_mesh(S.vertices, S.faces, np, use_curvature, density_dist);
 
 % Add noise:
 if (noise_strength > 0)

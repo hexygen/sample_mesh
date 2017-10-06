@@ -44,10 +44,3 @@ pcwrite(pcloud,pc_filename);
 % [s,out] = system(['"../poissonrec/PoissonRecon.exe" --in "',pc_filename,'" --out "',outname,'" --depth 10']);
 [s,out] = system(['"../poissonrec/SurfaceTrimmer.exe" --in "',pc_filename,'" --out "',outname,'" --trim 7']);
 disp(out);
-
-%%
-temp = read_off_shape('../data/dragon100k_pr.off');
-ab = temp.vertices(temp.faces(:,2),:) - temp.vertices(temp.faces(:,1),:);
-ac = temp.vertices(temp.faces(:,3),:) - temp.vertices(temp.faces(:,1),:);
-
-areas = sqrt(sum(cross(ab',ac').^2,1))./2;
