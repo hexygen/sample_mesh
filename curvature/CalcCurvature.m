@@ -29,8 +29,8 @@ e1=FV.vertices(FV.faces(:,1),:)-FV.vertices(FV.faces(:,3),:);
 e2=FV.vertices(FV.faces(:,2),:)-FV.vertices(FV.faces(:,1),:);
 % Normalize edge vectors
 e0_norm=normr(e0);
-e1_norm=normr(e1);
-e2_norm=normr(e2);
+% e1_norm=normr(e1);
+% e2_norm=normr(e2);
 
 wfp=zeros(size(FV.faces,1),3);
 
@@ -59,7 +59,7 @@ for i=1:size(FV.faces,1)
     x=A\b;
     
     FaceSFM{i,1}=[x(1),x(2);x(2) x(3)];
-    Kn(i)=[1 0]*FaceSFM{i,1}*[1;0];
+%     Kn(i)=[1 0]*FaceSFM{i,1}*[1;0];
     
     %Calculate Curvature Per Vertex
     %calculate voronoi weights
