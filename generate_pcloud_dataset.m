@@ -6,7 +6,10 @@ function generate_pcloud_dataset
     point_count = 100000;
     seed = 52435234;
 
-    shape_dir = '../data/shapes_new';
+    shape_dir = '../data/shapes';
+    if exist(shape_dir,'dir')~=7
+        error(['Cannot find shape directory ',shape_dir]);
+    end
 
     datasets = struct;
     dataset_ind = 1;
