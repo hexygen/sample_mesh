@@ -72,12 +72,19 @@ function [verts,faces,comments] = readoffmesh(filename,varargin)
                     n = polygonNormal3D(poly);
                     
                     axis = cross(n,[0;0;1]);
+                    angle = acos(dot(n,[0;0;1]));
                     axislen = sqrt(sum(axis.^2));
                     if axislen > eps('double') * 1000
                         axis = axis ./ axislen;
-                        rmat = axisangle2rotmat(axis,acos(dot(n,[0;0;1])));
+                        rmat = axisangle2rotmat(axis,angle);
                     else
-                        rmat = eye(3);
+                        if angle > pi/2
+                            % normal is approx. [0;0;-1], rotate 180 deg.
+                            % (about the Y-axis in this case)
+                            rmat = [-1,0,0 ; 0,1,0; 0,0,-1];
+                        else
+                            rmat = eye(3);
+                        end
                     end
                     
                     poly = rmat * poly;
