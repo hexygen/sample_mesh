@@ -6,7 +6,7 @@ function generate_pcloud_dataset
     point_count = 100000;
     seed = 52435234;
 
-    shape_dir = '../data/shapes/v3';
+    shape_dir = '../data/shapes';
     if exist(shape_dir,'dir')~=7
         error(['Cannot find shape directory ',shape_dir]);
     end
@@ -78,10 +78,10 @@ function generate_pcloud_dataset
     datasets(dataset_ind).density_distribution = {{'uniform'}};
     dataset_ind = dataset_ind + 1;
 
-    allshapes = cat(1,datasets.shapes);
-    if numel(unique(allshapes(:,1))) ~= size(allshapes,1)
-        error('some shape names are duplicates.');
-    end
+%     allshapes = cat(1,datasets.shapes);
+%     if numel(unique(allshapes(:,1))) ~= size(allshapes,1)
+%         error('some shape names are duplicates.');
+%     end
     
     for d = 1:numel(datasets)
         shapes = datasets(d).shapes;
@@ -147,5 +147,4 @@ function generate_pcloud_dataset
         end
 
     end
-    
 end
