@@ -45,6 +45,8 @@ function generate_pcloud_dataset
         'box_push', 'mesh', {fullfile(mesh_source_dir,'box_push.off')}; ...
         'pipe', 'mesh', {fullfile(mesh_source_dir,'pipe.off')}; ...
         'pipe_curve', 'mesh', {fullfile(mesh_source_dir,'pipe_curve.off')}; ... 
+        'column', 'mesh', {fullfile(mesh_source_dir,'column.off')}; ... 
+        'column_head', 'mesh', {fullfile(mesh_source_dir,'column_head.off')}; ... 
         };
     datasets(dataset_ind).noise_type = 'white';
     datasets(dataset_ind).min_noise = 0.0;
@@ -61,6 +63,7 @@ function generate_pcloud_dataset
     datasets(dataset_ind).max_noise = 0.0;
     datasets(dataset_ind).noise_level_count = 1;
     datasets(dataset_ind).density_distribution = {{'minmax',1,0.01}, {'minmax_layers',30,0.1,10}};
+    dataset_ind = dataset_ind + 1;
     
     % analytic dataset (separate because variable density is not implemented
     % for analytic shapes)
